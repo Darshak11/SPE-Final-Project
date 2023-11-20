@@ -1,17 +1,38 @@
-import React from 'react';
-import ReactDOM from 'react-dom/client';
+// src/index.js
+import React, { useState } from 'react';
+import ReactDOM from 'react-dom';
+import Login from './components/Login';
+import Signup from './components/Signup';
 import './index.css';
-import App from './App';
-import reportWebVitals from './reportWebVitals';
 
-const root = ReactDOM.createRoot(document.getElementById('root'));
-root.render(
-  <React.StrictMode>
+
+const App = () => {
+  const [authOption, setAuthOption] = useState(null);
+  
+  const handleLoginClick = () => {
+    setAuthOption('login');
+  };
+  
+  const handleSignupClick = () => {
+    setAuthOption('signup');
+  };
+
+  return (
+    <div>
+      <div>
+        <button onClick={handleLoginClick}>Login</button>
+        <button onClick={handleSignupClick}>Sign Up</button>
+      </div>
+      {authOption === 'login' && <Login />}
+      {authOption === 'signup' && <Signup />}
+    </div>
+  );
+};
+
+ReactDOM.render(
+  <div className="container">
     <App />
-  </React.StrictMode>
+  </div>,
+  document.getElementById('root')
 );
 
-// If you want to start measuring performance in your app, pass a function
-// to log results (for example: reportWebVitals(console.log))
-// or send to an analytics endpoint. Learn more: https://bit.ly/CRA-vitals
-reportWebVitals();
