@@ -1,6 +1,7 @@
 // src/components/Signup.js
-import React, { Component } from 'react';
 import './styles.css';
+import React, { Component } from 'react';
+import axios from 'axios';
 
 class Signup extends Component {
   constructor(props) {
@@ -10,6 +11,7 @@ class Signup extends Component {
       username: '',
       email: '',
       password: '',
+      phone: '',
       userType: 'auctioneer',
     };
   }
@@ -20,9 +22,17 @@ class Signup extends Component {
     });
   };
 
-  handleSignup = () => {
-    const { username, email, password, userType } = this.state;
-    console.log(`Signing up as ${userType}: ${username}, ${email}`);
+  handleSignup = async () => {
+    const { username, email, password, phone, userType } = this.state;
+
+    // Make a POST request to your backend
+    const user = { username, email, password, phone, userType };
+    // Replace 'http://localhost:8080/user/signup' with your backend signup endpoint
+    const response = await axios.post('http://localhost:8080/user/signup', user);
+    console.log(response.data);
+
+    // You may want to redirect the user after successful signup
+    // For example, using React Router: this.props.history.push('/dashboard');
   };
 
   render() {
@@ -61,6 +71,16 @@ class Signup extends Component {
           </label>
           <br />
           <label>
+            Phone:
+            <input
+              type="tel"
+              name="phone"
+              value={this.state.phone}
+              onChange={this.handleInputChange}
+            />
+          </label>
+          <br />
+          <label>
             User Type:
             <select
               name="userType"
@@ -81,5 +101,5 @@ class Signup extends Component {
     );
   }
 }
-  
+
 export default Signup;

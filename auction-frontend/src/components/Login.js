@@ -1,6 +1,7 @@
 // src/components/Login.js
 import './styles.css';
 import React, { Component } from 'react';
+import axios from 'axios';
 
 class Login extends Component {
   constructor(props) {
@@ -9,7 +10,6 @@ class Login extends Component {
     this.state = {
       username: '',
       password: '',
-      userType: 'auctioneer', // Default user type
     };
   }
 
@@ -19,12 +19,14 @@ class Login extends Component {
     });
   };
 
-  handleLogin = () => {
-    const { username, password, userType } = this.state;
+  handleLogin = async () => {
+    const { username, password} = this.state;
 
-    // You can implement authentication logic here
-    // For simplicity, let's just log the user info for now
-    console.log(`Logging in as ${userType}: ${username}`);
+    // Make a POST request to your backend
+    const user = { username, password};
+    // Replace '/api/login' with your backend login endpoint
+    const response = await axios.post('http://localhost:8080/user/login', user);
+    console.log(response.data);
 
     // You may want to redirect the user after successful login
     // For example, using React Router: this.props.history.push('/dashboard');
@@ -53,19 +55,6 @@ class Login extends Component {
               value={this.state.password}
               onChange={this.handleInputChange}
             />
-          </label>
-          <br />
-          <label>
-            User Type:
-            <select
-              name="userType"
-              value={this.state.userType}
-              onChange={this.handleInputChange}
-            >
-              <option value="auctioneer">Auctioneer</option>
-              <option value="player">Player</option>
-              <option value="owner">Owner</option>
-            </select>
           </label>
           <br />
           <button type="button" onClick={this.handleLogin}>
