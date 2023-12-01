@@ -24,6 +24,7 @@ function Login({ onLoginSuccess, isLoggedIn }) {
         "http://localhost:8080/user/login",
         user
       );
+      localStorage.setItem('token', response.data);
       console.log(response.data);
       if (response.status == "200") {
         const userType = "auctioneer";

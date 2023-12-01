@@ -45,6 +45,9 @@ public class User implements  UserDetails{
     @Column(name = "user_type")
     private String userType;
 
+    @OneToMany(mappedBy = "user")
+    private List<Event> events;
+
     @ManyToMany(fetch = FetchType.EAGER  , cascade = CascadeType.PERSIST)
     List <Role> roles ;
     // getters

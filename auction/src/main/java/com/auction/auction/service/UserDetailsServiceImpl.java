@@ -96,4 +96,12 @@ public class UserDetailsServiceImpl {
         return token;
         // Return the authenticated user
     }
+
+    public User findByUsername(String username) {
+        return userRepository.findByUsername(username).orElse(null);
+    }
+
+    public User findById(Long id) {
+        return userRepository.findById(id).orElse(null);
+    }
 }
