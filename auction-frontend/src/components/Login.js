@@ -1,69 +1,99 @@
 // src/components/Login.js
-import './styles.css';
-import React, { Component } from 'react';
-import axios from 'axios';
+import React, { useState, useRef } from "react";
+import axios from "axios";
+import { useNavigate } from "react-router-dom";
+import { Navbar } from "./Navbar.js";
 
-class Login extends Component {
-  constructor(props) {
-    super(props);
+function Login({ onLoginSuccess, isLoggedIn }) {
+  const navigate = useNavigate();
+  const username = useRef("");
+  const password = useRef("");
 
-    this.state = {
-      username: '',
-      password: '',
-    };
+  const [loginSuccess, setLoginSuccess] = useState(false);
+  const [userType, setUserType] = useState("");
+  const [loginError, setLoginError] = useState("");
+
+  const handleLogin = async () => {
+    console.log("Login clicked");
+    try {
+      const user = {
+        username: username.current.value,
+        password: password.current.value,
+      };
+      const response = await axios.post(
+        "http://localhost:8080/user/login",
+        user
+      );
+      console.log(response.data);
+      if (response.status == "200") {
+        const userType = "auctioneer";
+        onLoginSuccess();
+
+        if (userType == "auctioneer") {
+          navigate("/A_dashboard");
+        }
+      }
+    } catch (error) {
+      console.error("Login failed:", error.message);
+      setLoginError("Login failed. Please check your username and password.");
+      setTimeout(() => {
+        setLoginError("");
+      }, 3000);
+
+      setTimeout(() => {
+        password.current.value="";
+        username.current.value="";
+      }, 1000);
+    }
+  };
+
+  if (loginSuccess && userType === "auctioneer") {
+    navigate("A_dashboard");
+    // return <Redirect to="/A_dashboard" />;
   }
 
-  handleInputChange = (e) => {
-    this.setState({
-      [e.target.name]: e.target.value,
-    });
-  };
-
-  handleLogin = async () => {
-    const { username, password} = this.state;
-
-    // Make a POST request to your backend
-    const user = { username, password};
-    // Replace '/api/login' with your backend login endpoint
-    const response = await axios.post('http://localhost:8080/user/login', user);
-    console.log(response.data);
-
-    // You may want to redirect the user after successful login
-    // For example, using React Router: this.props.history.push('/dashboard');
-  };
-
-  render() {
-    return (
+  return (
+    <>
+      <Navbar isLoggedIn={isLoggedIn} />
       <div>
         <h2>Login</h2>
+        {loginError && (
+          <div class="alert alert-danger" role="alert">
+            {loginError}
+          </div>
+        )}
         <form>
           <label>
             Username:
             <input
               type="text"
               name="username"
-              value={this.state.username}
-              onChange={this.handleInputChange}
+              placeholder="Username"
+              // required
+              ref={username}
             />
           </label>
           <br />
           <label>
             Password:
             <input
-              type="password"
               name="password"
-              value={this.state.password}
-              onChange={this.handleInputChange}
+              type="password"
+              placeholder="Password"
+              // required
+              ref={password}
             />
           </label>
           <br />
-          <button type="button" onClick={this.handleLogin}>
+          <button type="button" onClick={handleLogin}>
             Login
           </button>
         </form>
+
+        {/* {loginError && <p>{loginError}</p>} */}
       </div>
-    );
-  }
+    </>
+  );
 }
 
 export default Login;
