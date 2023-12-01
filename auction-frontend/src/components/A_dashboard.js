@@ -1,19 +1,31 @@
 import React, { useState } from "react";
-import {useNavigate} from 'react-router-dom';
+import { useNavigate } from "react-router-dom";
 import { Navbar } from "./Navbar";
+import { Form, Button } from "react-bootstrap";
 // import { withRouter } from "react-router-dom";
 
-const A_Dashboard = ({onLogout, isLoggedIn}) => {
+const A_Dashboard = ({ onLogout, isLoggedIn }) => {
   const navigate = useNavigate();
   const [sports, setSports] = useState([]);
   const [selectedSport, setSelectedSport] = useState("");
   const availableSports = ["Football", "Basketball", "Tennis", "Cricket"];
   const [events, setEvents] = useState([]);
   const [eventName, setEventName] = useState("");
+  const [showForm, setShowForm] = useState(false);
 
   const handleSportSelection = (event) => {
     setSelectedSport(event.target.value);
   };
+
+  const handleClick = () => {
+    setShowForm(!showForm); // Toggle the showForm state
+  };
+
+  const handleSubmit = (event) => {
+    event.preventDefault();
+    // Handle form submission...
+    setShowForm(false); // Show the button and hide the form
+  }
 
   const handleAddSport = () => {
     if (!sports.includes(selectedSport) && selectedSport) {
@@ -29,7 +41,7 @@ const A_Dashboard = ({onLogout, isLoggedIn}) => {
 
   const handleLogout = () => {
     onLogout();
-    navigate("/login")
+    navigate("/login");
   };
 
   const SportsList = () => (
@@ -87,52 +99,72 @@ const A_Dashboard = ({onLogout, isLoggedIn}) => {
 
   return (
     <div className="container-fluid">
-      <Navbar isLoggedIn={isLoggedIn} onLogout={onLogout}/>
+      <Navbar isLoggedIn={isLoggedIn} onLogout={onLogout} />
       <main>
-        <h2>List of Sports</h2>
-        <SportsList />
-        <SportSelection />
-        <div className="input-group mt-3">
-          <input
-            type="text"
-            className="form-control"
-            placeholder="Event name"
-            value={eventName}
-            onChange={(e) => setEventName(e.target.value)}
-          />
-          <div className="input-group-append">
-            <button className="btn btn-primary" onClick={handleCreateEvent}>
-              Create Event
-            </button>
-          </div>
-        </div>
-        <div className="events row">
-          {events.map((event, index) => (
-            <div key={index} className="col-sm-12 col-md-6 col-lg-4 mb-4">
-              <div className="card">
-                <div className="card-header">
-                  <h3>{event.name}</h3>
-                </div>
-                <ul className="list-group list-group-flush">
-                  {event.sports.map((sport, i) => (
-                    <li key={i} className="list-group-item">
-                      {sport}
-                    </li>
-                  ))}
-                </ul>
-                <div className="card-body">
-                  {!event.locked && (
-                    <button
-                      className="btn btn-secondary"
-                      onClick={() => handleLockEvent(index)}
-                    >
-                      Lock Event
-                    </button>
-                  )}
-                </div>
-              </div>
-            </div>
-          ))}
+      <div className="input-group mt-3">
+          {!showForm && (
+            <Button onClick={handleClick} className="mb-3">Create Event</Button>
+          )}
+          {showForm && (
+            <Form onSubmit={handleSubmit}>
+              <Form.Group>
+                <Form.Label>Event Name:</Form.Label>
+                <Form.Control type="text" name="eventName" required/>
+              </Form.Group>
+              <Form.Group>
+                <Form.Label>Number of Teams:</Form.Label>
+                <Form.Control type="number" name="numTeams" min="0" required/>
+              </Form.Group>
+              <Form.Group>
+                <Form.Label>Event Date:</Form.Label>
+                <Form.Control type="date" name="eventDate" required/>
+              </Form.Group>
+              <Form.Group>
+                <Form.Label>Event Time:</Form.Label>
+                <Form.Control type="time" name="eventTime" required/>
+              </Form.Group>
+              <Form.Group>
+                <Form.Label>Number of Players per Team:</Form.Label>
+                <Form.Control type="number" name="numPlayers" required/>
+              </Form.Group>
+              <Form.Group>
+                <Form.Label>Player Information Required:</Form.Label>
+                <Form.Check
+                  type="checkbox"
+                  label="Player Name"
+                  name="playerName"
+                />
+                <Form.Check
+                  type="checkbox"
+                  label="Player Roll Number"
+                  name="playerRollNumber"
+                />
+                <Form.Check
+                  type="checkbox"
+                  label="Player Phone Number"
+                  name="playerPhoneNumber"
+                />
+                <Form.Check
+                  type="checkbox"
+                  label="Player Email ID"
+                  name="playerEmail"
+                />
+                <Form.Check
+                  type="checkbox"
+                  label="Player Position"
+                  name="playerPosition"
+                />
+                <Form.Check
+                  type="checkbox"
+                  label="Player Pic"
+                  name="playerPic"
+                />
+              </Form.Group>
+              <Button variant="primary" type="submit">
+                Submit
+              </Button>
+            </Form>
+          )}
         </div>
       </main>
     </div>
@@ -140,3 +172,8 @@ const A_Dashboard = ({onLogout, isLoggedIn}) => {
 };
 
 export default A_Dashboard;
+
+// create event
+
+// new form
+// event information: event name, number of teams, event Date, event Time, number of players per team, player information required.
