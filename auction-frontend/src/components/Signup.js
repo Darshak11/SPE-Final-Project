@@ -22,7 +22,7 @@ export const Signup = ({ onLoginSuccess, isLoggedIn }) => {
         password: password.current.value,
       };
       const response = await axios.post(
-        "http://localhost:8080/user/signup",
+        "http://localhost:8082/user/signup",
         user
       );
       console.log(response.data);
