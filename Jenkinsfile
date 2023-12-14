@@ -25,6 +25,16 @@ pipeline {
                 }
             }
         }
+        stage('Stage 0.1: Run MySQL Container') {
+            steps {
+                script {
+                    sh 'docker network inspect ${NETWORK} >/dev/null 2>&1 && docker network rm ${NETWORK} || true'
+                    sh 'docker container inspect mysqldb >/dev/null 2>&1 && docker container stop mysqldb && docker container rm mysqldb || true'
+                    sh 'docker network create ${NETWORK}'
+                    sh 'docker run --name mysqldb -p 3306:3306 -e MYSQL_ROOT_PASSWORD=${MYSQL_ROOT_PASSWORD} -d -v "/var/lib/mysql" --network=${NETWORK} mysql:latest'
+                }
+            }
+        }
        
         stage('Stage 1: Git Clone') {
             steps {
@@ -36,7 +46,9 @@ pipeline {
         stage('Stage 2: Build Spring Boot backend') {
             steps {
                 echo 'Building Spring Boot backend'
-                sh 'mvn clean install'
+                dir('auction'){
+                    sh 'mvn clean install'
+                }
             }
         }
        
@@ -95,6 +107,7 @@ pipeline {
         stage('Stage 8: Ansible Deployment') {
             steps {
                 dir('Deployment'){
+                    sh 'docker network rm ${NETWORK}'
                     sh 'ansible-playbook -i inventory deploy.yml'
                 }
             }

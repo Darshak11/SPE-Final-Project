@@ -42,4 +42,4 @@ volumes:
 
 networks:
   auction-network:
-    driver: bridge
+    external: true
