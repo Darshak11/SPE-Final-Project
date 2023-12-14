@@ -5,6 +5,8 @@ import Login from "./components/Login";
 import Signup from "./components/Signup";
 import Home from "./components/Home";
 import A_dashboard from "./components/A_dashboard.js";
+import axios from "axios";
+axios.defaults.baseURL = process.env.REACT_APP_API_BASE_URL;
 
 const App = () => {
   const [authOption, setAuthOption] = useState(null);

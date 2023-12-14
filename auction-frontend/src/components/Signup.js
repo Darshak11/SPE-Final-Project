@@ -22,7 +22,7 @@ export const Signup = ({ onLoginSuccess, isLoggedIn }) => {
         password: password.current.value,
       };
       const response = await axios.post(
-        "http://localhost:8082/user/signup",
+        `${process.env.REACT_APP_API_BASE_URL}/user/signup`,
         user
       );
       console.log(response.data);
@@ -46,22 +46,22 @@ export const Signup = ({ onLoginSuccess, isLoggedIn }) => {
         <form>
           <label>
             Username:
-            <input type="text" name="username" ref={username} />
+            <input type="text" name="username" placeholder="Username" ref={username} />
           </label>
           <br />
           <label>
             Email:
-            <input type="email" name="email" ref={email} />
+            <input type="email" name="email" placeholder="Email" ref={email} />
           </label>
           <br />
           <label>
             Password:
-            <input type="password" name="password" ref={password} />
+            <input type="password" name="password" placeholder="Password" ref={password} />
           </label>
           <br />
           <label>
             Phone:
-            <input type="tel" name="phone" ref={phone} />
+            <input type="tel" name="phone" placeholder="Phone no" ref={phone} />
           </label>
           <br />
           <label>

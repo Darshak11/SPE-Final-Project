@@ -21,7 +21,7 @@ function Login({ onLoginSuccess, isLoggedIn }) {
         password: password.current.value,
       };
       const response = await axios.post(
-        "http://localhost:8082/user/login",
+        `${process.env.REACT_APP_API_BASE_URL}/user/login`,
         user
       );
       localStorage.setItem('token', response.data);

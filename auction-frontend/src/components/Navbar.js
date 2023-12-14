@@ -1,7 +1,5 @@
-import React, { Component, useState } from "react";
-import { Redirect } from "react-router-dom";
-import axios from "axios";
 import { useNavigate, Link } from "react-router-dom";
+import Modal from 'react-modal';
 
 export const Navbar = ({ isLoggedIn, onLogout }) => {
   const navigate = useNavigate();
