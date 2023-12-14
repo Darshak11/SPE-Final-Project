@@ -21,7 +21,7 @@ function Login({ onLoginSuccess, isLoggedIn }) {
         password: password.current.value,
       };
       const response = await axios.post(
-        "http://localhost:8080/user/login",
+        "http://localhost:8082/user/login",
         user
       );
       localStorage.setItem('token', response.data);
@@ -56,7 +56,7 @@ function Login({ onLoginSuccess, isLoggedIn }) {
   return (
     <>
       <Navbar isLoggedIn={isLoggedIn} />
-      <div>
+      <div className="login">
         <h2>Login</h2>
         {loginError && (
           <div class="alert alert-danger" role="alert">

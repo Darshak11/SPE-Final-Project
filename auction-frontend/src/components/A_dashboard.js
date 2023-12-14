@@ -1,12 +1,10 @@
 import React, { useState, useEffect } from "react";
-import { useNavigate } from "react-router-dom";
 import { Navbar } from "./Navbar";
 import { Form, Button, Card } from "react-bootstrap";
 import axios from "axios";
 // import { withRouter } from "react-router-dom";
 
 const A_Dashboard = ({ onLogout, isLoggedIn }) => {
-  const navigate = useNavigate();
   const [events, setEvents] = useState([]);
   const [showForm, setShowForm] = useState(false);
   const [eventName, setEventName] = useState("");
@@ -22,6 +20,8 @@ const A_Dashboard = ({ onLogout, isLoggedIn }) => {
     playerPosition: false,
     playerPic: false,
   });
+
+  const [eve, setEve] = useState([]);
 
   const handleClick = () => {
     setShowForm(!showForm); // Toggle the showForm state
@@ -49,12 +49,6 @@ const A_Dashboard = ({ onLogout, isLoggedIn }) => {
     setShowForm(false); // Show the button and hide the form
   };
 
-  const handleLogout = () => {
-    onLogout();
-    localStorage.removeItem("token");
-    navigate("/login");
-  };
-
   const handleLockEvent = (index) => {
     const updatedEvents = [...events];
     updatedEvents[index].locked = true;
@@ -62,7 +56,6 @@ const A_Dashboard = ({ onLogout, isLoggedIn }) => {
   };
 
   const handleCreateEvent = async () => {
-
     const newEvent = {
       name: eventName,
       numTeams,
@@ -109,16 +102,32 @@ const A_Dashboard = ({ onLogout, isLoggedIn }) => {
     });
   };
 
+  const showEvents = async () => {
+    try {
+      const response = await axios.get("http://localhost:8082/events", {
+        headers: {
+          "Content-Type": "application/json",
+          Authorization: `Bearer ${localStorage.getItem("token")}`,
+        },
+      });
+      console.log(response.data);
+      setEve(response.data);
+    } catch (error) {
+      console.error("Error:", error);
+    }
+  };
+
   return (
     <div className="container-fluid">
       <Navbar isLoggedIn={isLoggedIn} onLogout={onLogout} />
       <main>
-        <div className="input-group mt-3">
+        <div className="das mt-3">
           {!showForm && (
             <Button onClick={handleClick} className="mb-3">
               Create Event
             </Button>
           )}
+
           {showForm && (
             <Form onSubmit={handleSubmit}>
               <Form.Group>
@@ -252,6 +261,10 @@ const A_Dashboard = ({ onLogout, isLoggedIn }) => {
               </Button>
             </Form>
           )}
+
+          <div className="eventContent">
+            <Button variant="primary" onClick={showEvents}>Show all Events</Button>
+          </div>
         </div>
 
         {/* <div className="input-group mb-3 mt-3">

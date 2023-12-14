@@ -41,7 +41,7 @@ export const Signup = ({ onLoginSuccess, isLoggedIn }) => {
   return (
     <>
       <Navbar />
-      <div>
+      <div className="signup">
         <h2>Sign Up</h2>
         <form>
           <label>
