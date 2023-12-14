@@ -1,0 +1,21 @@
+---
+- name : Deploy docker images
+  hosts: localhost
+
+  tasks:
+    - name: Copy Docker Compose file from host machine to remote host
+      copy:
+        src: ../docker-compose.yml
+        dest: ./ 
+    - name: Pull the docker images specified in docker-compose
+      shell:
+        cmd: docker compose pull
+        chdir: ./
+    - name: Start the docker containers in detached mode
+      command: docker compose up -d 
+    - name: Prune unwanted images
+      command: docker image prune --force
+
+
+
+    
