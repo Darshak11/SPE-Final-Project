@@ -16,7 +16,7 @@ services:
     image: "dolo650/auction-frontend:latest"
     container_name: auction-frontend
     ports:
-      - "3000:3000"
+      - "3001:3000"
     networks:
       - auction-network
   
