@@ -27,12 +27,15 @@ import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
 
 @Service
 @Transactional
 @RequiredArgsConstructor
 public class UserDetailsServiceImpl {
 
+    private static final Logger logger= LogManager.getLogger(UserDetailsServiceImpl.class);
     @Autowired
     private final UserRepository userRepository;
 
@@ -61,6 +64,7 @@ public class UserDetailsServiceImpl {
         // Check if a user with the same username already exists
         if (userRepository.findByUsername(registerDto.getUsername()).isPresent()) {
             // Throw an exception or return null
+            logger.error("Username already exists");
             throw new RuntimeException("Username already exists");
         }
 

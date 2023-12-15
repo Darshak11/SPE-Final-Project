@@ -15,12 +15,17 @@ import com.auction.auction.repository.RoleRepository;
 import com.auction.auction.repository.UserRepository;
 import com.auction.auction.service.UserDetailsServiceImpl;
 
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
+
 
 @SpringBootApplication
 
 public class AuctionApplication {
 
+    private static final Logger logger = LogManager.getLogger(AuctionApplication.class);
 	public static void main(String[] args) {
+        logger.info("Spring Application Running");
 		SpringApplication.run(AuctionApplication.class, args);
 	}
 	@Bean
