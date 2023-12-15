@@ -34,7 +34,7 @@ services:
       - SPRING_DATASOURCE_USERNAME=root
       - SPRING_DATASOURCE_PASSWORD=password
     volumes:
-      - ./logs:./logs
+      - ../logs:/logs
   
 volumes:
   mysql-data:
