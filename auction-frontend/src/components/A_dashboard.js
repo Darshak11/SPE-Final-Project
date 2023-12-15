@@ -102,26 +102,33 @@ const A_Dashboard = ({ onLogout, isLoggedIn }) => {
     });
   };
 
-  const showEvents = async () => {
-    try {
-      const response = await axios.get("http://localhost:8082/events", {
-        headers: {
-          "Content-Type": "application/json",
-          Authorization: `Bearer ${localStorage.getItem("token")}`,
-        },
-      });
-      console.log(response.data);
-      setEve(response.data);
-    } catch (error) {
-      console.error("Error:", error);
-    }
+  // const showEvents = async () => {
+  //   try {
+  //     const response = await axios.get("http://localhost:8082/events", {
+  //       headers: {
+  //         "Content-Type": "application/json",
+  //         Authorization: `Bearer ${localStorage.getItem("token")}`,
+  //       },
+  //     });
+  //     console.log(response.data);
+  //     setEve(response.data);
+  //   } catch (error) {
+  //     console.error("Error:", error);
+  //   }
+  // };
+
+  const showEvents = () => {
+    // Here, you can simply use the 'events' state variable
+    // because it already holds all the events
+    setEve(events);
   };
 
   return (
-    <div className="container-fluid">
+    <div className="events ">
       <Navbar isLoggedIn={isLoggedIn} onLogout={onLogout} />
       <main>
-        <div className="das mt-3">
+        <div className="formi">
+          <br />
           {!showForm && (
             <Button onClick={handleClick} className="mb-3">
               Create Event
@@ -261,38 +268,38 @@ const A_Dashboard = ({ onLogout, isLoggedIn }) => {
               </Button>
             </Form>
           )}
+          <br />
 
           <div className="eventContent">
-            <Button variant="primary" onClick={showEvents}>Show all Events</Button>
+            <Button variant="primary" onClick={showEvents}>
+              Show all Events
+            </Button>
           </div>
         </div>
-
-        {/* <div className="input-group mb-3 mt-3">
-          {events.map((event, index) => {
-            const eventDate = new Date(event.eventDate);
-            const currentDate = new Date();
-            const diffTime = Math.abs(eventDate - currentDate);
-            const diffDays = Math.ceil(diffTime / (1000 * 60 * 60 * 24));
-
-            return (
-              <div key={index} className="card text-center mb-5 mt-3 p-4 border-0">
-                <div className="card-header">Event</div>
-                <div className="card-body">
-                  <h5 className="card-title">{event.eventName}</h5>
-                  <p className="card-text">
-                    Number of Teams: {event.numTeams} <br />
-                    Event Date: {event.eventDate} <br />
-                    Event Time: {event.eventTime} <br />
-                    Number of Players per Team: {event.numPlayers}
-                  </p>
-                </div>
-                <div className="card-footer text-muted">
-                  {diffDays} {diffDays === 1 ? "day" : "days"} to go
-                </div>
-              </div>
-            );
-          })}
-        </div> */}
+        <div className="card-container">
+          {eve.map((event, index) => (
+            <Card
+              key={index}
+              className="card-center"
+              style={{ width: "18rem" }}
+            >
+              <Card.Body>
+                <Card.Title>{event.eventName}</Card.Title>
+                <Card.Text>
+                  Number of Teams: {event.numTeams}
+                  <br />
+                  Event Date: {event.eventDate}
+                  <br />
+                  Event Time: {event.eventTime}
+                  <br />
+                  Number of Players per Team: {event.numPlayers}
+                  <br />
+                </Card.Text>
+              </Card.Body>
+            </Card>
+          ))}
+          <br />
+        </div>
       </main>
     </div>
   );
