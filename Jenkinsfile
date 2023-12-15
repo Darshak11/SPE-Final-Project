@@ -4,10 +4,9 @@ pipeline {
         frontend = 'auction-frontend:latest' // Specify your frontend Docker image name/tag
         mysqlImage = 'mysql:latest' // Specify the MySQL Docker image
         mysqlContainerName = 'mysql-container' // Specify the name for your MySQL container
-        MYSQL_ROOT_PASSWORD = credentials('mysql-password')
+        MYSQL_ROOT_PASSWORD = 'password'
         MYSQL_PORT = '3306'
         docker_image = ''
-        NETWORK = 'deployment_auction-network'
        
     }
    
@@ -28,10 +27,9 @@ pipeline {
         stage('Stage 0.1: Run MySQL Container') {
             steps {
                 script {
-                    sh 'docker network inspect ${NETWORK} >/dev/null 2>&1 && docker network rm ${NETWORK} || true'
                     sh 'docker container inspect mysqldb >/dev/null 2>&1 && docker container stop mysqldb && docker container rm mysqldb || true'
-                    sh 'docker network create ${NETWORK}'
-                    sh 'docker run --name mysqldb -p 3306:3306 -e MYSQL_ROOT_PASSWORD=${MYSQL_ROOT_PASSWORD} -d -v "/var/lib/mysql" --network=${NETWORK} mysql:latest'
+                    sh 'docker run --name mysqldb -p 3306:3306 -e MYSQL_ROOT_PASSWORD=${MYSQL_ROOT_PASSWORD} -d -v "/var/lib/mysql" mysql:latest'
+                    sh 'sleep 30'
                 }
             }
         }
@@ -89,7 +87,7 @@ pipeline {
                 echo 'Pushing frontend Docker image to DockerHub'
                 script {
                     docker.withRegistry('', 'DockerHubCred') {
-                        sh 'docker push karanjit708/${frontend}'
+                        sh 'docker push dolo650/${frontend}'
                     }
                 }
             }
@@ -107,7 +105,7 @@ pipeline {
         stage('Stage 8: Ansible Deployment') {
             steps {
                 dir('Deployment'){
-                    sh 'docker network rm ${NETWORK}'
+                    sh 'docker container inspect mysqldb >/dev/null 2>&1 && docker container stop mysqldb && docker container rm mysqldb || true'
                     sh 'ansible-playbook -i inventory deploy.yml'
                 }
             }
