@@ -13,7 +13,7 @@ services:
     networks:
       - auction-network
   frontend:
-    image: "dolo650/auction-frontend:latest"
+    image: "yashkoushik0311/auction-frontend:latest"
     container_name: auction-frontend
     ports:
       - "3001:3000"
@@ -21,7 +21,7 @@ services:
       - auction-network
   
   auction-spring:
-    image: "dolo650/auction-spring:latest"
+    image: "yashkoushik0311/auction-spring:latest"
     ports:
       - "8082:8082"
     networks:
